@@ -1,0 +1,12 @@
+const express = require('express');
+const router = express.Router();
+const teachercontroller = require('../controller/teachercontroller');
+router.use(express.urlencoded({extended:false}));
+router.get('/teacher',teachercontroller.viewTeacher);
+router.get('/admin',teachercontroller.viewAdmin);
+router.post('/signup/teacher',teachercontroller.createTeacher);
+router.post('/signup/admin',teachercontroller.createAdmin);
+router.post('/classroom',teachercontroller.createClassroom);
+router.post('/attendence',teachercontroller.createAttendence);
+router.get('/attendence',teachercontroller.viewAttendence);
+module.exports = router;
