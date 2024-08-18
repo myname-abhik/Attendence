@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema({
         },
         "token": {
             "type": "string",
-            "unique": true
+            "default": null
         },
         "Teacher_Registration_Id": {
             "type": "string",
