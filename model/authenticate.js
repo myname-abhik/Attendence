@@ -1,5 +1,6 @@
 const mysql = require('mysql');
 
+
 let connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -20,7 +21,7 @@ exports.connect = ()=>{
 exports.connection = connection;
 exports.create_Faculty_registered_details = () => {
     // Ensure you're using the correct database before creating the table
-    connection.query('CREATE TABLE IF NOT EXISTS Faculty_registered_details (reg_no INT PRIMARY KEY AUTO_INCREMENT,Full_Name VARCHAR(300) NOT NULL, Email VARCHAR(100) NOT NULL,Phone VARCHAR(10) NOT NULL,Post VARCHAR(100) NOT NULL,Department VARCHAR(200) NOT NULL,Class_id INT NULL);', (err, results) => {
+    connection.query('CREATE TABLE IF NOT EXISTS Faculty_registered_details (reg_no INT PRIMARY KEY AUTO_INCREMENT,Full_Name VARCHAR(300) NOT NULL, Email VARCHAR(100) NOT NULL,Phone VARCHAR(10) NOT NULL,Post VARCHAR(100) NOT NULL,Department VARCHAR(200) NOT NULL,Teacher_Registraion_Id varchar(200) not null);', (err, results) => {
         if (err) {
             console.error('Error creating table:', err.stack);
             return;
@@ -31,7 +32,7 @@ exports.create_Faculty_registered_details = () => {
 
 exports.create_Admin_registered_details = () => {
     // Ensure you're using the correct database before creating the table
-    connection.query('CREATE TABLE IF NOT EXISTS Admin_registered_details (reg_no INT PRIMARY KEY AUTO_INCREMENT, Full_Name VARCHAR(300) NOT NULL, Email VARCHAR(100) NOT NULL, Phone varchar(10) not null, Department varchar(200) not null, Class_id int null)', (err, results) => {
+    connection.query('CREATE TABLE IF NOT EXISTS Admin_registered_details (reg_no INT PRIMARY KEY AUTO_INCREMENT, Full_Name VARCHAR(300) NOT NULL, Email VARCHAR(100) NOT NULL, Phone varchar(10) not null, Department varchar(200) not null, Teacher_Registraion_Id varchar(200) not null)', (err, results) => {
         if (err) {
             console.error('Error creating table:', err.stack);
             return;
