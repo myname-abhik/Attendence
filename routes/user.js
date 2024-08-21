@@ -11,6 +11,7 @@ router.post('/signin/teacher/mongodb',teachercontroller.login_Teacher_mongodb);
 router.post('/signup/admin',teachercontroller.createAdmin);
 router.post('/classroom',teachercontroller.createClassroom);
 router.get('/classroom',teachercontroller.viewClassroom);
+router.post('/classroom/id',teachercontroller.Classroom_find);
 router.post('/attendence',teachercontroller.createAttendence);
 router.get('/attendence',teachercontroller.viewAttendence);
 module.exports = router;
