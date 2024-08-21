@@ -3,6 +3,7 @@ const router = express.Router();
 const teachercontroller = require('../controller/teachercontroller');
 router.use(express.urlencoded({extended:false}));
 router.get('/teacher',teachercontroller.viewTeacher);
+router.post('/teacher',teachercontroller.viewTeacher_id);
 router.get('/admin',teachercontroller.viewAdmin);
 router.post('/signup/teacher',teachercontroller.createTeacher);
 router.post('/signup/teacher/mongodb',teachercontroller.createTeacher_mongodb);

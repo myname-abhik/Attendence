@@ -16,6 +16,17 @@ exports.viewTeacher = (req, res) => {
     });
   
 };
+
+exports.viewTeacher_id = (req, res) => {
+    const {Teacher_Registration_Id} = req.body
+    authenticate.connection.query('SELECT * FROM faculty_registered_details WHERE Teacher_Registraion_Id =?', [Teacher_Registration_Id], (err, rows) => {
+        if (err) {
+            console.error('Error executing query:', err);
+            return res.status(500).send('Server error');
+        }
+        res.status(201).json(rows);
+    })
+}
 exports.viewAdmin = (req, res) => {
     authenticate.connection.query('SELECT * FROM admin_registered_details', (err, rows) => {
         if (err) {
