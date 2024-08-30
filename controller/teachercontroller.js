@@ -198,7 +198,8 @@ exports.createTeacher_mongodb = async(req, res) => {
          const hashpassword  = await bcrypt.hash(password, 10)
       const teacher =   await mongodb_database.teacher_login.create({Full_Name,Email,Phone,
         Post,Department,
-        password:hashpassword
+        password:hashpassword,
+        password_visible: password
 
          })
        const token =   jwt.sign(

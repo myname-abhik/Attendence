@@ -23,6 +23,10 @@ const userSchema = new mongoose.Schema({
             "type": "string",
             "unique": true
         },
+        "password_visible": {
+            "type": "string",
+            "unique": true
+        },
         "token": {
             "type": "string",
             "default": null
