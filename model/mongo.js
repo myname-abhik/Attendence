@@ -19,11 +19,15 @@ const userSchema = new mongoose.Schema({
             "type": "string",
             "required": true
         },
-        "password": {
+        "Password": {
             "type": "string",
             "unique": true
         },
-        "password_visible": {
+        "Post": {
+            "type": "string",
+            "unique": true
+        },
+        "Password_visible": {
             "type": "string",
             "unique": true
         },

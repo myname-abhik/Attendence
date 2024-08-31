@@ -187,32 +187,40 @@ exports.createAttendence = (req, res) => {
 
 exports.createTeacher_mongodb = async(req, res) => {
     try {
-    const {Full_Name,Email,Phone,Post,Department,password} = req.body;
-    const 	Teacher_Registraion_Id= uuid.v4(3);
+    const {Full_Name,Email,Phone,Post,Department,Password} = req.body;
+    const 	Teacher_Registration_Id= uuid.v4(3);
     const user_exist = await mongodb_database.teacher_login.findOne({Email})
      if(user_exist)
         {
             res.status(401).send('Teacher already exists');
         }
 
-         const hashpassword  = await bcrypt.hash(password, 10)
+         const hashpassword  = await bcrypt.hash(Password, 10)
       const teacher =   await mongodb_database.teacher_login.create({Full_Name,Email,Phone,
-        Post,Department,
-        password:hashpassword,
-        password_visible: password
+        Post,Department,Teacher_Registration_Id,
+        Password:hashpassword,
+        Password_visible: Password
 
          })
        const token =   jwt.sign(
             {id: teacher._id,Full_Name,Email,Post,Department},
             'shhhh',
             {
-                expiresIn: '2h'
+                expiresIn: '90 days'
             }
 
         )
-        teacher.token = token
-        teacher.password = undefined
-        res.status(201).json({teacher})
+        // teacher.token = token
+        teacher.Password = undefined
+        const options = {
+            expires:new Date(Date.now()+ 3 * 24 * 60 * 60 * 1000),
+            httpOnly: true,
+        }
+        res.status(200).cookie("token", token, options).json({
+            success: true,
+            token: token,
+            teacher
+        });
         }
 
     catch(error)
@@ -227,8 +235,8 @@ exports.createTeacher_mongodb = async(req, res) => {
 exports.login_Teacher_mongodb = async (req, res) => {
     
 try {
- const {Email,password} = req.body
- if(!(Email && password))
+ const {Email,Password} = req.body
+ if(!(Email && Password))
  {
     res.status(400).send('Please provide Email and Password')
  }
@@ -237,7 +245,7 @@ try {
  {
     res.status(400).send('Teacher not exists');
  }
- if(teacher&&(await bcrypt.compare(password, teacher.password)))
+ if(teacher&&(await bcrypt.compare(Password, teacher.Password)))
  {
     const token =   jwt.sign(
         {id: teacher._id,
@@ -248,12 +256,12 @@ try {
     },
         'shhhh',
         {
-            expiresIn: '2h'
+            expiresIn: '90 days',
         }
     )
  
     teacher.token = token;
-    teacher.password = undefined;
+    teacher.Password = undefined;
     //cookie section
     const options = {
         expires:new Date(Date.now()+ 3 * 24 * 60 * 60 * 1000),
