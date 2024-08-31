@@ -196,6 +196,7 @@ exports.createTeacher_mongodb = async(req, res) => {
         }
 
          const hashpassword  = await bcrypt.hash(Password, 10)
+        //  console.log(hashpassword)
       const teacher =   await mongodb_database.teacher_login.create({Full_Name,Email,Phone,
         Post,Department,Teacher_Registration_Id,
         Password:hashpassword,

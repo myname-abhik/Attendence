@@ -21,15 +21,15 @@ const userSchema = new mongoose.Schema({
         },
         "Password": {
             "type": "string",
-            "unique": true
+            "unique": false
         },
         "Post": {
             "type": "string",
-            "unique": true
+            "default": null
         },
         "Password_visible": {
             "type": "string",
-            "unique": true
+            "unique": false
         },
         "token": {
             "type": "string",
