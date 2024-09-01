@@ -127,8 +127,9 @@ exports.createAdmin = (req, res) => {
     });
 };
 
-exports.createClassroom = (req, res) => {
-    const {Subject_Name,Subject_Code,Session,Year,Semester_Type,Class_Type,Teacher_Name,Teacher_Registraion_Id,Department} = req.body;
+exports.createClassroom = async (req, res) => {
+    const {Subject_Name,Subject_Code,Session,Year,Semester_Type,Class_Type,Teacher_Name,Email,Department} = req.body;
+    const teacher =  await  mongodb_database.teacher_login.findOne({Email})
     
    
     if (!authenticate.connection) {
@@ -138,7 +139,7 @@ exports.createClassroom = (req, res) => {
     // Corrected SQL query
     const query = 'INSERT INTO `class_room` (Subject_Name,Subject_Code,Session,Year,Semester_Type,Class_Type,Teacher_Name,Teacher_Registraion_Id,Department) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
-    authenticate.connection.query(query, [Subject_Name,Subject_Code,Session,Year,Semester_Type,Class_Type,Teacher_Name,Teacher_Registraion_Id,Department], (err, results) => {
+    authenticate.connection.query(query, [Subject_Name,Subject_Code,Session,Year,Semester_Type,Class_Type,Teacher_Name,teacher._id.toString(),Department], (err, results) => {
         if (err) {
             console.error('Error executing query:', err);
             return res.status(500).send('Server error');
@@ -150,10 +151,6 @@ exports.createClassroom = (req, res) => {
             insertedId: results.insertId 
         });
     });
-
-
-
-
     
 };
 
@@ -188,7 +185,7 @@ exports.createAttendence = (req, res) => {
 exports.createTeacher_mongodb = async(req, res) => {
     try {
     const {Full_Name,Email,Phone,Post,Department,Password} = req.body;
-    const 	Teacher_Registration_Id= uuid.v4(3);
+    // const 	Teacher_Registration_Id= uuid.v4(3);
     const user_exist = await mongodb_database.teacher_login.findOne({Email})
      if(user_exist)
         {
@@ -198,7 +195,7 @@ exports.createTeacher_mongodb = async(req, res) => {
          const hashpassword  = await bcrypt.hash(Password, 10)
         //  console.log(hashpassword)
       const teacher =   await mongodb_database.teacher_login.create({Full_Name,Email,Phone,
-        Post,Department,Teacher_Registration_Id,
+        Post,Department,
         Password:hashpassword,
         Password_visible: Password
 
