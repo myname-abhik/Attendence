@@ -40,7 +40,7 @@ exports.viewAdmin = (req, res) => {
 };
 
 exports.viewClassroom = (req, res) => {
-    authenticate.connection.query('SELECT * FROM class_room', (err, rows) => {
+    authenticate.connection.query('SELECT * FROM Class_Room', (err, rows) => {
         if (err) {
             console.error('Error executing query:', err);
             return res.status(500).send('Server error');
@@ -63,7 +63,7 @@ exports.Classroom_find = (req, res) => {
 }
 
 exports.viewAttendence = (req, res) => {
-    authenticate.connection.query('SELECT * FROM attendance_details', (err, rows) => {
+    authenticate.connection.query('SELECT * FROM Attendance_details', (err, rows) => {
         if (err) {
             console.error('Error executing query:', err);
             return res.status(500).send('Server error');
@@ -128,7 +128,7 @@ exports.createAdmin = (req, res) => {
 };
 
 exports.createClassroom = async (req, res) => {
-    const {Subject_Name,Subject_Code,Session,Year,Semester_Type,Class_Type,Teacher_Name,Email,Department} = req.body;
+    const {Subject_Name,Subject_Code,Session,Year,Semester_Type,Class_Type,Teacher_Name,Email,Department,Section,Semester,Total_Students} = req.body;
     const teacher =  await  mongodb_database.teacher_login.findOne({Email})
     
    
@@ -137,9 +137,9 @@ exports.createClassroom = async (req, res) => {
     }
 
     // Corrected SQL query
-    const query = 'INSERT INTO `class_room` (Subject_Name,Subject_Code,Session,Year,Semester_Type,Class_Type,Teacher_Name,Teacher_Registraion_Id,Department) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const query = 'INSERT INTO `Class_Room` (Subject_Name,Subject_Code,Session,Year,Semester_Type,Class_Type,Teacher_Name,Teacher_Registration_Id,Department,Section,Semester,Total_Students) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
-    authenticate.connection.query(query, [Subject_Name,Subject_Code,Session,Year,Semester_Type,Class_Type,Teacher_Name,teacher._id.toString(),Department], (err, results) => {
+    authenticate.connection.query(query, [Subject_Name,Subject_Code,Session,Year,Semester_Type,Class_Type,Teacher_Name,teacher._id.toString(),Department,Section,Semester,Total_Students,], (err, results) => {
         if (err) {
             console.error('Error executing query:', err);
             return res.status(500).send('Server error');
@@ -155,18 +155,18 @@ exports.createClassroom = async (req, res) => {
 };
 
 
-exports.createAttendence = (req, res) => {
-    const {Subject_Name,Subject_Code,Session,Year,Semester_Type,Class_Type,Teacher_Name,Teacher_Registraion_Id,Department,Comment,period ,section,Total_Attendance} = req.body;
-    
+exports.createAttendence = async(req, res) => {
+    const {Subject_Name,Subject_Code,Session,Year,Semester_Type,Class_Type,Teacher_Name,Email,Department,Comment,Period ,Section,Total_Attendance} = req.body;
+    const teacher =  await  mongodb_database.teacher_login.findOne({Email})
    
     if (!authenticate.connection) {
         return res.status(500).send('Database connection not established');
     }
 
     // Corrected SQL query
-    const query = 'INSERT INTO `attendance_details` (Subject_Name,Subject_Code,Session,Year,Semester_Type,Class_Type,Teacher_Name,Teacher_Registraion_Id,Department,Comment, period ,section,Total_Attendance) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?)';
+    const query = 'INSERT INTO `Attendance_details` (Subject_Name,Subject_Code,Session,Year,Semester_Type,Class_Type,Teacher_Name,Teacher_Registration_Id,Department,Comment, Period ,Section,Total_Attendance) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?)';
 
-    authenticate.connection.query(query, [Subject_Name,Subject_Code,Session,Year,Semester_Type,Class_Type,Teacher_Name,Teacher_Registraion_Id,Department,Comment, period ,section,Total_Attendance], (err, results) => {
+    authenticate.connection.query(query, [Subject_Name,Subject_Code,Session,Year,Semester_Type,Class_Type,Teacher_Name,teacher._id.toString(),Department,Comment,Period.replace(/\s+/g, '') ,Section,Total_Attendance], (err, results) => {
         if (err) {
             console.error('Error executing query:', err);
             return res.status(500).send('Server error');
