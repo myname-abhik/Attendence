@@ -35,10 +35,10 @@ const userSchema = new mongoose.Schema({
             "type": "string",
             "default": null
         },
-        "Teacher_Registration_Id": {
-            "type": "string",
-            "default": null
-        }
+        // "Teacher_Registration_Id": {
+        //     "type": "string",
+        //     "default": null
+        // }
     
     
 });
