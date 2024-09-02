@@ -37,7 +37,7 @@ exports.create_Admin_registered_details = () => {
             console.error('Error creating table:', err.stack);
             return;
         }
-        console.log('Table created or already exists: Admin_registered_details');
+        console.log('Table created or already exists: Admin_registered_details')
     });
 };
 
