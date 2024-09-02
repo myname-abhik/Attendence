@@ -43,7 +43,7 @@ exports.create_Admin_registered_details = () => {
 
 exports.create_Classs_room = () => {
     // Ensure you're using the correct database before creating the table
-    connection.query('CREATE TABLE IF NOT EXISTS Class_Room (Subject_Name varchar(200) not null, Subject_Code VARCHAR(300) NOT NULL, Session VARCHAR(100) NOT NULL, Year int not null, Semester_Type varchar(100)  not null, Class_Type varchar(200) not null,Teacher_Name varchar(200) not null,created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,Teacher_Registration_Id varchar(200) not null, Department varchar(200) not null,Classroom_id int primary key KEY AUTO_INCREMENT,Section varchar(200) not null, Semester varchar(200) not null, Total_Students varchar(200) not null)', (err, results) => {
+    connection.query('CREATE TABLE IF NOT EXISTS Class_Room (Subject_Name varchar(200) not null, Subject_Code VARCHAR(300) NOT NULL, Session VARCHAR(100) NOT NULL, Year VARCHAR(100) not null, Semester_Type varchar(100)  not null, Class_Type varchar(200) not null,Teacher_Name varchar(200) not null,created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,Teacher_Registration_Id varchar(200) not null, Department varchar(200) not null,Classroom_id int primary key KEY AUTO_INCREMENT,Section varchar(200) not null, Semester varchar(200) not null, Total_Students varchar(200) not null)', (err, results) => {
         if (err) {
             console.error('Error creating table:', err.stack);
             return;
