@@ -51,8 +51,8 @@ exports.viewClassroom = (req, res) => {
   
 };
 exports.Classroom_find = (req, res) => {
-    const {Teacher_Registraion_Id} = req.body
-    authenticate.connection.query('SELECT * FROM Class_Room WHERE Teacher_Registration_Id =?', [Teacher_Registraion_Id], (err, rows) => {
+    const {Teacher_Registration_Id} = req.body
+    authenticate.connection.query('SELECT * FROM Class_Room WHERE Teacher_Registration_Id =?', [Teacher_Registration_Id], (err, rows) => {
         if (err) {
             console.error('Error executing query:', err);
             return res.status(500).send('Server error');
