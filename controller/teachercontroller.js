@@ -61,6 +61,17 @@ exports.Classroom_find = (req, res) => {
         res.status(201).json(rows);
     })
 }
+exports.Attendence_find = (req, res) => {
+    const {Subject_Code,Teacher_Registration_Id} = req.body
+    authenticate.connection.query('SELECT * FROM Attendance_details WHERE Subject_Code = ? AND Teacher_Registration_Id = ?', [Subject_Code,Teacher_Registration_Id], (err, rows) => {
+        if (err) {
+            console.error('Error executing query:', err);
+            return res.status(500).send('Server error');
+        }
+        console.log(req.body);
+        res.status(201).json(rows);
+    })
+}
 
 exports.viewAttendence = (req, res) => {
     authenticate.connection.query('SELECT * FROM Attendance_details', (err, rows) => {
