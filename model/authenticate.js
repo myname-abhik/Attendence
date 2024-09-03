@@ -54,7 +54,7 @@ exports.create_Classs_room = () => {
 
 exports.create_Attendance_details = () => {
     // Ensure you're using the correct database before creating the table
-    connection.query('CREATE TABLE IF NOT EXISTS Attendance_details (Subject_Name varchar(200) not null, Subject_Code VARCHAR(300) NOT NULL, Session VARCHAR(100) NOT NULL, Year VARCHAR(100) not null, Semester_Type varchar(100)  not null, Class_Type varchar(200) not null,Teacher_Name varchar(200) not null,Teacher_Registration_Id varchar(200) not null, Department varchar(200) not null,Attendance_id int primary key KEY AUTO_INCREMENT,Comment varchar(3000) not null, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, Period varchar(200) not null, Section varchar(200) not null,Total_Attendance  int not null)', (err, results) => {
+    connection.query('CREATE TABLE IF NOT EXISTS Attendance_details (Subject_Name varchar(200) not null, Subject_Code VARCHAR(300) NOT NULL, Session VARCHAR(100) NOT NULL, Year VARCHAR(100) not null, Semester_Type varchar(100)  not null, Class_Type varchar(200) not null,Teacher_Name varchar(200) not null,Teacher_Registration_Id varchar(200) not null, Department varchar(200) not null,Attendance_id int primary key KEY AUTO_INCREMENT,Comment varchar(3000) not null, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, Period varchar(200) not null, Section varchar(200) not null,Total_Attendance  VARCHAR(100) not null)', (err, results) => {
         if (err) {
             console.error('Error creating table:', err.stack);
             return;

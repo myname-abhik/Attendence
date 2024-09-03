@@ -13,6 +13,7 @@ router.post('/classroom',teachercontroller.createClassroom);
 router.get('/classroom',teachercontroller.viewClassroom);
 router.post('/classroom/id',teachercontroller.Classroom_find);
 router.post('/attendence',teachercontroller.createAttendence);
+router.post('/attendence/id',teachercontroller.Attendence_find);
 router.get('/attendence',teachercontroller.viewAttendence);
 
 module.exports = router;
