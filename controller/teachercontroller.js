@@ -62,8 +62,8 @@ exports.Classroom_find = (req, res) => {
     })
 }
 exports.Attendence_find = (req, res) => {
-    const {Subject_Code,Teacher_Registration_Id} = req.body
-    authenticate.connection.query('SELECT * FROM Attendance_details WHERE Subject_Code = ? AND Teacher_Registration_Id = ?', [Subject_Code,Teacher_Registration_Id], (err, rows) => {
+    const {Classroom_id} = req.body
+    authenticate.connection.query('SELECT * FROM Attendance_details WHERE Classroom_id = ?', [Classroom_id], (err, rows) => {
         if (err) {
             console.error('Error executing query:', err);
             return res.status(500).send('Server error');
@@ -141,16 +141,18 @@ exports.createAdmin = (req, res) => {
 exports.createClassroom = async (req, res) => {
     const {Subject_Name,Subject_Code,Session,Year,Semester_Type,Class_Type,Teacher_Name,Email,Department,Section,Semester,Total_Students} = req.body;
     const teacher =  await  mongodb_database.teacher_login.findOne({Email})
+    const 	Classroom_id = uuid.v4().toString();
     
    
     if (!authenticate.connection) {
         return res.status(500).send('Database connection not established');
     }
-
+     console.log(teacher._id.toString());
     // Corrected SQL query
-    const query = 'INSERT INTO `Class_Room` (Subject_Name,Subject_Code,Session,Year,Semester_Type,Class_Type,Teacher_Name,Teacher_Registration_Id,Department,Section,Semester,Total_Students) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const query = 'INSERT INTO `Class_Room` (Subject_Name,Subject_Code,Session,Year,Semester_Type,Class_Type,Teacher_Name,Teacher_Registration_Id,Department,Section,Semester,Total_Students,Classroom_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    
 
-    authenticate.connection.query(query, [Subject_Name,Subject_Code,Session,Year,Semester_Type,Class_Type,Teacher_Name,teacher._id.toString(),Department,Section,Semester,Total_Students,], (err, results) => {
+    authenticate.connection.query(query, [Subject_Name,Subject_Code,Session,Year,Semester_Type,Class_Type,Teacher_Name,teacher._id.toString(),Department,Section,Semester,Total_Students,Classroom_id], (err, results) => {
         if (err) {
             console.error('Error executing query:', err);
             return res.status(500).send('Server error');
@@ -167,7 +169,7 @@ exports.createClassroom = async (req, res) => {
 
 
 exports.createAttendence = async(req, res) => {
-    const {Subject_Name,Subject_Code,Session,Year,Semester_Type,Class_Type,Teacher_Name,Email,Department,Comment,Period ,Section,Total_Attendance} = req.body;
+    const {Subject_Name,Subject_Code,Session,Year,Semester_Type,Class_Type,Teacher_Name,Email,Department,Comment,Period ,Section,Total_Attendance,Classroom_id} = req.body;
     const teacher =  await  mongodb_database.teacher_login.findOne({Email})
    
     if (!authenticate.connection) {
@@ -175,9 +177,9 @@ exports.createAttendence = async(req, res) => {
     }
 
     // Corrected SQL query
-    const query = 'INSERT INTO `Attendance_details` (Subject_Name,Subject_Code,Session,Year,Semester_Type,Class_Type,Teacher_Name,Teacher_Registration_Id,Department,Comment, Period ,Section,Total_Attendance) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?)';
+    const query = 'INSERT INTO `Attendance_details` (Subject_Name,Subject_Code,Session,Year,Semester_Type,Class_Type,Teacher_Name,Teacher_Registration_Id,Department,Comment, Period ,Section,Total_Attendance,Classroom_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?, ?)';
 
-    authenticate.connection.query(query, [Subject_Name,Subject_Code,Session,Year,Semester_Type,Class_Type,Teacher_Name,teacher._id.toString(),Department,Comment,Period.replace(/\s+/g, '') ,Section,Total_Attendance], (err, results) => {
+    authenticate.connection.query(query, [Subject_Name,Subject_Code,Session,Year,Semester_Type,Class_Type,Teacher_Name,teacher._id.toString(),Department,Comment,Period.replace(/\s+/g, '') ,Section,Total_Attendance,Classroom_id], (err, results) => {
         if (err) {
             console.error('Error executing query:', err);
             return res.status(500).send('Server error');
