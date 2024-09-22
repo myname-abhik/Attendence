@@ -63,7 +63,7 @@ exports.create_Attendance_details = () => {
     });
 };
 exports.generate_attendance =() => {
-    connection.query('CREATE TABLE IF NOT EXISTS Generate_report (Teacher_Registraion_Id varchar(255) NOT NULL,Total_Attendance VARCHAR(100) NOT NULL,Total_Students VARCHAR(200) NOT NULL,AVG_Day varchar(200) not null,Day_Id varchar(200) primary key,created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,Req_start varchar(200) not null,Req_end varchar(200) not null,Month varchar(200) not null,Year varchar(200) not null,Day_no varchar(200) not null)',(err,result)=>{
+    connection.query('CREATE TABLE IF NOT EXISTS Generate_report (Teacher_Registrtaion_Id varchar(255) NOT NULL,Total_Attendance JSON NOT NULL,Total_Students VARCHAR(200) NOT NULL,AVG_Day varchar(200) not null,Day_Id int primary key AUTO_INCREMENT,created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,Req_start varchar(200) not null,Req_end varchar(200) not null,Month  JSON NOT NULL,Year  JSON NOT NULL,Day_no varchar(200) not null,Average_percent varchar(200) not null)',(err,result)=>{
         if (err) {
             console.error('Error creating table:', err.stack);
             return;

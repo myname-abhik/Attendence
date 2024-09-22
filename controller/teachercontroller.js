@@ -2,7 +2,9 @@ const authenticate = require('../model/authenticate');
 const uuid = require('uuid');
 const mongodb_database = require('../model/mongo')
 const bcrypt = require('bcryptjs')
-const jwt =  require('jsonwebtoken')
+const jwt =  require('jsonwebtoken');
+const dayjs = require('dayjs');
+const { parseISO, format } = require('date-fns');
 
 
 exports.viewTeacher = (req, res) => {
@@ -296,10 +298,14 @@ try {
 exports.reportgenerate = (req,res) => {
    
  try{
-        const {Teacher_Registration_Id,Classroom_id} = req.body;
-     const query = 'SELECT Total_Attendance,Teacher_Name,created_at, Subject_Name FROM `Attendance_details` WHERE Teacher_Registration_Id = ? and Classroom_id = ?'
+        const {Teacher_Registration_Id,Classroom_id,startDate,endDate} = req.body;
+        const[year,month,day] = endDate.split('-');
+        
+        const endDateNew = `${year}-${month}-${parseInt(day) + 1}`;
+        console.log(endDateNew)
+     const query = 'SELECT Total_Attendance,Teacher_Name,Date_,created_at, Subject_Name FROM `Attendance_details` WHERE Teacher_Registration_Id = ? and Classroom_id = ? and created_at >= ? AND created_at <= ? '
      const classRoomQuery = `SELECT Total_Students FROM Class_Room WHERE Classroom_id = ?`
-     authenticate.connection.query(query,[Teacher_Registration_Id,Classroom_id],(err, results) => {
+     authenticate.connection.query(query,[Teacher_Registration_Id,Classroom_id,startDate,endDateNew],(err, results) => {
          if(err) {
              console.error('Error executing query:', err);
              res.status(500).json({'error':err})
@@ -309,21 +315,39 @@ exports.reportgenerate = (req,res) => {
                 console.error('Error executing query:', err);
                 res.status(500).json({'error':err})
             }
-
-            function convertDate(dateString) {
-              
-                const humanReadableDate = dateString.toLocaleDateString('en-GB');
-                return humanReadableDate;
-            }
+       
             
-            // Convert the date strings to Date objects
-            results.forEach(entry => {
-                entry.created_at = convertDate(entry.created_at);
-            });
+      const Total_Attendance_date =  results.map(record => parseInt(record.Total_Attendance)).reduce((sum, value) => sum + value, 0);
+      const average_Attendance = Total_Attendance_date / results.length;
+      const average_percent = (average_Attendance/classRoomResults[0].Total_Students)*100;
+ const month=[];
+ const Total_Attendance =[]
+ const year =[]
+      results.forEach(entry => {
+        //    const date = parseISO(entry.created_at);
+        //    console.log(entry.created_at);
+       month.push(format(entry.created_at,'MMMM'))
+       Total_Attendance.push(entry.Total_Attendance)
+       let date = new Date(entry.created_at);
+       year.push(date.getUTCFullYear());
+    //   console.log(month)
+    });
+    console.log(month,Total_Attendance,year)
+    const Report_Generated_AtQuery = `Insert into Generate_report (Teacher_Registrtaion_Id,Total_Attendance,Total_Students,AVG_Day,Req_start,Req_end,Month,Year,Day_no,Average_percent)VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?)`
 
-            res.json({"Main_info": results, 'Total_Student':classRoomResults, "Days": results.length
+    authenticate.connection.query(Report_Generated_AtQuery,[Teacher_Registration_Id,JSON.stringify(Total_Attendance),classRoomResults[0].Total_Students,average_Attendance,startDate,endDate,JSON.stringify(month),JSON.stringify(year),results.length,`${average_percent}%`],(err,getreport) => {
+        if(err) {
+            console.error('Error executing query:', err);
+            res.status(500).json({'error':err})
+        }
+        res.json({"Main_info": results, 'Total_Student':classRoomResults, "Days": results.length, "Total_Attendance_date":Total_Attendance_date,
+            "Average_Attendance": `${average_Attendance}`,
+            "Average_percent": `${average_percent}%`,
+            "Rport": getreport,
+            "Report_Generated_At": new Date()
 
             })
+        })
         })
        })
        
@@ -331,11 +355,21 @@ exports.reportgenerate = (req,res) => {
 }
  catch(error){
     console.log(error)
-    res.status(500).send('Server Error')
+    res.status(501).send('Server Error')
  }
 }
+// SELECT Total_Attendance,Teacher_Name,Date_, Subject_Name FROM `Attendance_details` WHERE Teacher_Registration_Id = '66ed7defe9784242cb48acc0' and Classroom_id = '8103976e-c3b4-42d8-ad84-2b606b7eae57' and created_at >= '2024-09-20' AND created_at < '2024-09-22';
 
-
+exports.get_reportgenerate =(req,res)=>{
+    const query = 'SELECT * FROM Generate_report'
+    authenticate.connection.query(query,(err, results) => {
+        if(err) {
+            console.error('Error executing query:', err);
+            res.status(500).json({'error':err})
+        }
+        res.json({"report":results})
+    })
+}
 
 
 

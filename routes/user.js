@@ -16,5 +16,6 @@ router.post('/attendence',teachercontroller.createAttendence);
 router.post('/attendence/id',teachercontroller.Attendence_find);
 router.get('/attendence',teachercontroller.viewAttendence);
 router.post('/reportgenerate',teachercontroller.reportgenerate);
+router.get('/reportgenerate',teachercontroller.get_reportgenerate);
 
 module.exports = router;
