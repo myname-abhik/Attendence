@@ -38,6 +38,7 @@ authenticate.create_Faculty_registered_details();
 authenticate.create_Admin_registered_details();
 authenticate.create_Classs_room();
 authenticate.create_Attendance_details();
+authenticate.generate_attendance();
 app.use('/portal', teacher)
 
 
