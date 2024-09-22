@@ -297,7 +297,7 @@ exports.reportgenerate = (req,res) => {
    
  try{
         const {Teacher_Registration_Id,Classroom_id} = req.body;
-     const query = 'SELECT Total_Attendance,Teacher_Name,Date_, Subject_Name FROM `Attendance_details` WHERE Teacher_Registration_Id = ? and Classroom_id = ?'
+     const query = 'SELECT Total_Attendance,Teacher_Name,created_at, Subject_Name FROM `Attendance_details` WHERE Teacher_Registration_Id = ? and Classroom_id = ?'
      const classRoomQuery = `SELECT Total_Students FROM Class_Room WHERE Classroom_id = ?`
      authenticate.connection.query(query,[Teacher_Registration_Id,Classroom_id],(err, results) => {
          if(err) {
@@ -311,17 +311,14 @@ exports.reportgenerate = (req,res) => {
             }
 
             function convertDate(dateString) {
-                const [day, month, year] = dateString.split('-');
-                // console.log(typeof(new Date(year, month - 1, day)));
-                const dateObject =  new Date(year, month - 1, day)
-                dateObject.setDate(dateObject.getDate() - 1);
-                const humanReadableDate = dateObject.toLocaleDateString('en-GB');
-                return humanReadableDate; // month is 0-indexed
+              
+                const humanReadableDate = dateString.toLocaleDateString('en-GB');
+                return humanReadableDate;
             }
             
             // Convert the date strings to Date objects
             results.forEach(entry => {
-                entry.Date_ = convertDate(entry.Date_);
+                entry.created_at = convertDate(entry.created_at);
             });
 
             res.json({"Main_info": results, 'Total_Student':classRoomResults, "Days": results.length
