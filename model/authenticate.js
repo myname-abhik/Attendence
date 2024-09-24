@@ -1,4 +1,4 @@
-const mysql = require('mysql');
+const mysql = require('mysql2');
 
 
 let connection = mysql.createConnection({
@@ -17,6 +17,37 @@ exports.connect = ()=>{
     console.log('Connected to the database');
 });
 }
+
+const keepAliveQuery = () => {
+    try{
+        connection.ping();
+    } catch (err) {
+        console.error('Error pinging database:', err.stack);
+    }
+};
+
+
+// Set an interval to run the keep-alive query every 5 minutes (300000 milliseconds)
+setInterval(keepAliveQuery, 300000);
+
+// connection.getConnection((err, connection) => {
+//     if (err) {
+//         console.error('Error getting connection from pool:', err.stack);
+//         return;
+//     }
+//     console.log('Connected to the database');
+
+//     // // Use the connection
+//     // connection.query('SELECT 1', (err, results) => {
+//     //     connection.release(); // Release the connection back to the pool
+
+//     //     if (err) {
+//     //         console.error('Error executing query:', err.stack);
+//     //         return;
+//     //     }
+//     //     console.log('Query results:', results);
+//     // });
+// });
 
 exports.connection = connection;
 exports.create_Faculty_registered_details = () => {

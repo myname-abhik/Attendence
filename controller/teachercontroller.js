@@ -310,6 +310,11 @@ exports.reportgenerate = (req,res) => {
              console.error('Error executing query:', err);
              res.status(500).json({'error':err})
          }
+         if(results.length === 0)
+        {
+                res.status(404).json({message: 'No record found'});
+                return;
+        }
          authenticate.connection.query(classRoomQuery,[Classroom_id],(err, classRoomResults) => {
             if(err) {
                 console.error('Error executing query:', err);
