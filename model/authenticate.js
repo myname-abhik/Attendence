@@ -2,10 +2,10 @@ const mysql = require('mysql2');
 
 
 let connection = mysql.createConnection({
-    host: 'bufcjkvksp2pbreurdjj-mysql.services.clever-cloud.com',
-    user: 'uucj4pbekfznhp1w',
-    password: 'R2J9gCkQ8ntXGEQrvdEG',
-    database: 'bufcjkvksp2pbreurdjj'
+    host: '144.24.123.223',
+    user: 'deep',
+    password: '1234',
+    database: 'studentDb'
 });
 
 exports.connect = ()=>{ 
