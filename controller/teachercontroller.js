@@ -216,6 +216,8 @@ exports.createTeacher_mongodb = async(req, res) => {
         Password_visible: Password
 
          })
+         console.log('teacher',teacher);
+         
        const token =   jwt.sign(
             {id: teacher._id,Full_Name,Email,Post,Department},
             'shhhh',

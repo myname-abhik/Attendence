@@ -44,5 +44,5 @@ const userSchema = new mongoose.Schema({
 });
 // teacher_login =   mongoose.model('Teacher_attendence',userSchema)
 
-exports.teacher_login = mongoose.model('Teacher_attendence',userSchema)
+exports.teacher_login = mongoose.model('teacher',userSchema)
 }
