@@ -5,6 +5,7 @@ router.use(express.urlencoded({extended:false}));
 router.get('/teacher',teachercontroller.viewTeacher);
 router.post('/teacher',teachercontroller.viewTeacher_id);
 router.get('/admin',teachercontroller.viewAdmin);
+router.post('/admin/login',teachercontroller.adminLogin);
 router.post('/signup/teacher',teachercontroller.createTeacher);
 router.post('/signup/teacher/mongodb',teachercontroller.createTeacher_mongodb);
 router.post('/signin/teacher/mongodb',teachercontroller.login_Teacher_mongodb);
@@ -17,5 +18,7 @@ router.post('/attendence/id',teachercontroller.Attendence_find);
 router.get('/attendence',teachercontroller.viewAttendence);
 router.post('/reportgenerate',teachercontroller.reportgenerate);
 router.get('/reportgenerate',teachercontroller.get_reportgenerate);
+router.get('/report',teachercontroller.get_reportgenerate_id);
+router.get('/report/admin',teachercontroller.get_reportgenerate_id_admin);
 
 module.exports = router;
